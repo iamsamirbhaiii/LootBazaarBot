@@ -1,21 +1,15 @@
+import os
 from telegram.ext import Updater, CommandHandler
 
-# Yahan tumhara actual bot token directly likha gaya hai
-TOKEN = "7386973532:AAGNP-IadFCd9tTw2MohGrghFZxZF7Tk4bo"
+TOKEN = os.getenv("BOT_TOKEN")  # Token secure tarike se
+
+updater = Updater(token=TOKEN, use_context=True)
+dispatcher = updater.dispatcher
 
 def start(update, context):
-    update.message.reply_text("Welcome to LootBazaar Bot! Use /refer to get your referral link.")
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Bot chalu hai!")
 
-def refer(update, context):
-    user_id = update.message.from_user.id
-    referral_link = f"https://t.me/JoinLootBazaarBot?start={user_id}"
-    update.message.reply_text(f"Your referral link:\n{referral_link}")
-
-updater = Updater(token=TOKEN)
-dp = updater.dispatcher
-
-dp.add_handler(CommandHandler("start", start))
-dp.add_handler(CommandHandler("refer", refer))
+dispatcher.add_handler(CommandHandler("start", start))
 
 updater.start_polling()
 updater.idle()
